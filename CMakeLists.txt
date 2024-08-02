@@ -14,7 +14,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # include(.)
 
 # Add an executable named 'GraphTest' that is built from 'graph_test_program.cpp'
-add_executable(GraphTest graph_test_program.cpp)
 
 # Add the Graph source files
 set(SOURCES Graph.cpp Symbol.cpp)
@@ -26,4 +25,12 @@ set(HEADERS Graph.hpp Symbol.hpp)
 include_directories(${CMAKE_SOURCE_DIR})
 
 # Link the executable 'GraphTest' with the Graph source files
+if(BUILD_TESTING)
+    add_executable(GraphTest graph_test.cpp)
+    target_link_libraries(GraphTest GTest::gtest_main)
+    include(GoogleTest)
+    gtest_discover_tests(GraphTest)
+endif()
+
+
 target_sources(GraphTest PRIVATE ${SOURCES} ${HEADERS})
