@@ -1,0 +1,2 @@
+/home/nadim/fsl/bin/ar qc ../../../lib/libgmock_main.a CMakeFiles/gmock_main.dir/src/gmock_main.cc.o
+/home/nadim/fsl/bin/ranlib ../../../lib/libgmock_main.a
