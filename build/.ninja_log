@@ -1,5 +1,0 @@
-# ninja log v5
-13	349	1722558274699223500	CMakeFiles/GraphTest.dir/Symbol.cpp.o	701b86f1dda9916e
-12	2285	1722558276635513000	CMakeFiles/GraphTest.dir/Graph.cpp.o	c3399e6517e2eda3
-11	2574	1722558276923917300	CMakeFiles/GraphTest.dir/graph_test_program.cpp.o	b2a57bd158f9c397
-2576	3166	1722558277518037100	GraphTest	81518ce3ebc768af
