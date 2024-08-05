@@ -125,7 +125,7 @@ public:
         return explored_accumulator == m_v;
     }
 
-    std::vector<T> PathTo(T v, T s) const
+    std::vector<T> PathTo(T s, T v) const
     {
         if (!hasPathTo(v))
         {
