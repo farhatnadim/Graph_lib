@@ -26,19 +26,22 @@ public:
     {
         std::string edges;
         std::string vertices;
-        if (getline(f, vertices) && getline(f, edges))
-        {
-            initialize(std::stoi(vertices), std::stoi(edges));
-            int u, v;
-            while (f >> u >> v)
+        if(input == Graph_Input_type::EXPLICIT)
+         {
+            if (getline(f, vertices) && getline(f, edges))
             {
-                addEdge(u, v);
+                initialize_explicit(std::stoi(vertices), std::stoi(edges));
+                int u, v;
+                while (f >> u >> v)
+                {
+                    addEdge(u, v);
+                }
             }
         }
     }
 
 
-    void initialize(int V, int E)
+    void initialize_explicit(int V, int E)
     {
         m_v = V;
         m_e = E;
