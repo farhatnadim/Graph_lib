@@ -47,7 +47,7 @@ public:
         m_e = E;
         m_adj_list.clear();
         m_explored.assign(m_v, false);
-        edgeTo.assign(m_v, 0);
+        m_edgeTo.assign(m_v, 0);
         m_id.assign(m_v, 0);
     }
 
@@ -86,7 +86,7 @@ public:
         {
             if (!m_explored[edge])
             {
-                edgeTo[edge] = v;
+                m_edgeTo[edge] = v;
                 dfs(edge);
             }
         }
@@ -107,7 +107,7 @@ public:
             {
                 if (!m_explored[edge])
                 {
-                    edgeTo[edge] = vertex;
+                    m_edgeTo[edge] = vertex;
                     m_explored[edge] = true;
                     q.push(edge);
                 }
@@ -136,7 +136,7 @@ public:
             return {};
         }
         std::vector<T> path;
-        for (T x = v; x != s; x = edgeTo[x])
+        for (T x = v; x != s; x = m_edgeTo[x])
         {
             path.push_back(x);
         }
@@ -166,6 +166,31 @@ public:
         return m_cc_count;
     }
 
+    bool Explored(const T & v)
+    {
+        return m_explored[v];
+    }
+
+    void SetExplored(const T & v)
+    {
+        m_explored[v] = true;
+    }
+
+    void SetEdgeTo(const T & e, const T & v)
+    {
+        m_edgeTo[e] = v; 
+    }
+
+    void SetId(const T & v, const int & count)
+    {
+        m_id[v] = count;
+    }
+
+    const int & Get_CC_Count() const 
+    {
+        return m_cc_count;
+    }
+
     const std::size_t& Get_vertex_id(const std::size_t& v) const
     {
         return m_id[v];
@@ -176,9 +201,12 @@ public:
         return m_id[v] == m_id[w];
     }
 
+
+
     friend void drawGraph<T>(std::ostream &out, const Graph<T>& graph, bool digraph);
 
 private:
+
     int m_v; // number of vertices
     int m_e; // number of edges
     adj_list_t m_adj_list; // adjacency list
@@ -186,7 +214,7 @@ private:
     std::vector<bool> m_explored;
     std::vector<std::size_t> m_id;
     int m_cc_count; // connected components count
-    std::vector<T> edgeTo;
+    std::vector<T> m_edgeTo;
 
     bool hasPathTo(T v) const
     {
@@ -194,6 +222,8 @@ private:
     }
 };
 
+
+/// Move below to a different file called Graph_Algo
 template <typename T>
 void drawGraph(std::ostream &out, const Graph<T>& graph, bool digraph)
 {
@@ -212,3 +242,20 @@ void drawGraph(std::ostream &out, const Graph<T>& graph, bool digraph)
     }
     out << "}\n";
 }
+
+
+template <typename T> 
+void dfs( Graph<T> & g , const T& v)
+{
+    g.SetExplored(v);
+
+    g.SetId( g.Get_CC_Count());
+    for (const auto& edge : g.adj(v))
+    {
+        if (!g.Explored(edge))
+        {
+                g.SetEdgeTo(edge,v);
+                dfs(edge);
+        }
+    }
+} // end of the function DFS 
