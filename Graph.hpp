@@ -149,17 +149,6 @@ public:
         std::fill(m_explored.begin(), m_explored.end(), false);
     }
 
-    void cc()
-    {
-        for (std::size_t s = 0; s < m_v; s++)
-        {
-            if (!m_explored[s])
-            {
-                this->dfs(s);
-                m_cc_count++;
-            }
-        }
-    }
 
     const int& Get_cc_Count() const
     {
@@ -191,6 +180,11 @@ public:
         return m_cc_count;
     }
 
+    void incrementCC_Count(int amount)
+    {
+        m_cc_count += amount;
+    }
+
     const std::size_t& Get_vertex_id(const std::size_t& v) const
     {
         return m_id[v];
@@ -201,9 +195,7 @@ public:
         return m_id[v] == m_id[w];
     }
 
-
-
-    friend void drawGraph<T>(std::ostream &out, const Graph<T>& graph, bool digraph);
+    friend void drawGraph(std::ostream &out, const Graph<T>& graph, bool digraph);
 
 private:
 
@@ -244,6 +236,9 @@ void drawGraph(std::ostream &out, const Graph<T>& graph, bool digraph)
 }
 
 
+
+
+/** Depth first search for connected Componets */
 template <typename T> 
 void dfs( Graph<T> & g , const T& v)
 {
@@ -259,3 +254,16 @@ void dfs( Graph<T> & g , const T& v)
         }
     }
 } // end of the function DFS 
+
+template <typename T>
+void cc(Graph<T> &g)
+{
+    for (std::size_t s = 0; s < g.Get_vertices_number(); s++)
+    {
+        if (!g.Explored(s))
+        {
+            g.dfs(s);
+            g.incrementCC_Count(1);
+            }
+        }    
+}

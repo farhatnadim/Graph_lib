@@ -23,14 +23,15 @@ TEST(TestTopic, ConnectedComponents)
     std::string graph_data_file(ROOT_DIR + GRAPH_FILENAMES[0]);
     auto file = ifstream(graph_data_file);
     Graph<int> tinyG(file, Graph_Input_type::EXPLICIT);
-    tinyG.cc();
+    //tinyG.cc();
+    cc<int> (tinyG);
     EXPECT_EQ(tinyG.Get_cc_Count(),3) << "Testing tinyG\n";
     file.close();
     graph_data_file = ROOT_DIR + GRAPH_FILENAMES[1];
 
     file = ifstream(graph_data_file);
     Graph<int> tinyCG(file, Graph_Input_type::EXPLICIT);
-    tinyCG.cc();
+    cc<int>(tinyCG);
     EXPECT_EQ(tinyCG.Get_cc_Count(),1) << "Testing tinyCG\n";
     file.close();
 }
