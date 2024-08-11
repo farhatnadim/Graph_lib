@@ -77,20 +77,6 @@ public:
         return m_e;
     }
 
-    // Depth first search
-    void dfs(const T& v)
-    {
-        m_explored[v] = true;
-        m_id[v] = m_cc_count;
-        for (const auto& edge : this->adj(v))
-        {
-            if (!m_explored[edge])
-            {
-                m_edgeTo[edge] = v;
-                dfs(edge);
-            }
-        }
-    }
 
     // Breadth first search
     void bfs(const T& v)
@@ -195,7 +181,12 @@ public:
         return m_id[v] == m_id[w];
     }
 
+    bool hasPathTo(T v) const
+    {
+        return m_explored[v];
+    }
     friend void drawGraph(std::ostream &out, const Graph<T>& graph, bool digraph);
+
 
 private:
 
@@ -207,11 +198,7 @@ private:
     std::vector<std::size_t> m_id;
     int m_cc_count; // connected components count
     std::vector<T> m_edgeTo;
-
-    bool hasPathTo(T v) const
-    {
-        return m_explored[v];
-    }
+    
 };
 
 
@@ -244,13 +231,13 @@ void dfs( Graph<T> & g , const T& v)
 {
     g.SetExplored(v);
 
-    g.SetId( g.Get_CC_Count());
+    g.SetId(v, g.Get_CC_Count());
     for (const auto& edge : g.adj(v))
     {
         if (!g.Explored(edge))
         {
                 g.SetEdgeTo(edge,v);
-                dfs(edge);
+                dfs<int>(g,edge);
         }
     }
 } // end of the function DFS 
@@ -262,8 +249,33 @@ void cc(Graph<T> &g)
     {
         if (!g.Explored(s))
         {
-            g.dfs(s);
+            dfs<int>(g,s);
             g.incrementCC_Count(1);
-            }
+        }
         }    
 }
+
+// Breadth first search
+template <typename T>
+
+    void bfs(Graph<T> &g,const T& v)
+    {
+        g.SetExplored(v);
+        std::queue<T> q;
+        q.push(v);
+
+        while (!q.empty())
+        {
+            T vertex = q.front();
+            q.pop();
+            for (const auto& edge : g.adj(vertex))
+            {
+                if (!g.Explored(edge))
+                {
+                    g.SetEdgeTo(edge,v);
+                    g.SetExplored(edge);
+                    q.push(edge);
+                }
+            }
+        }
+    }
