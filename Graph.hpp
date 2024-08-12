@@ -77,30 +77,6 @@ public:
         return m_e;
     }
 
-
-    // Breadth first search
-    void bfs(const T& v)
-    {
-        m_explored[v] = true;
-        std::queue<T> q;
-        q.push(v);
-
-        while (!q.empty())
-        {
-            T vertex = q.front();
-            q.pop();
-            for (const auto& edge : this->adj(vertex))
-            {
-                if (!m_explored[edge])
-                {
-                    m_edgeTo[edge] = vertex;
-                    m_explored[edge] = true;
-                    q.push(edge);
-                }
-            }
-        }
-    }
-
     bool isGraphConnected() const
     {
         std::size_t explored_accumulator = 0;
@@ -114,7 +90,7 @@ public:
         return explored_accumulator == m_v;
     }
 
-    std::vector<T> PathTo(T s, T v) const
+    std::vector<T> PathTo(const T &s, const T & v) const
     {
         if (!hasPathTo(v))
         {
@@ -122,11 +98,14 @@ public:
             return {};
         }
         std::vector<T> path;
+
         for (T x = v; x != s; x = m_edgeTo[x])
         {
             path.push_back(x);
         }
         path.push_back(s);
+        for (auto element : path)
+            std::cout << element << "\n";
         return path;
     }
 
@@ -181,11 +160,13 @@ public:
         return m_id[v] == m_id[w];
     }
 
-    bool hasPathTo(T v) const
+    bool hasPathTo(const T &v) const
     {
         return m_explored[v];
     }
-    friend void drawGraph(std::ostream &out, const Graph<T>& graph, bool digraph);
+
+
+    friend void drawGraph<>(std::ostream &out, const Graph<T>& graph, bool digraph);
 
 
 private:
@@ -257,7 +238,6 @@ void cc(Graph<T> &g)
 
 // Breadth first search
 template <typename T>
-
     void bfs(Graph<T> &g,const T& v)
     {
         g.SetExplored(v);
@@ -272,7 +252,7 @@ template <typename T>
             {
                 if (!g.Explored(edge))
                 {
-                    g.SetEdgeTo(edge,v);
+                    g.SetEdgeTo(edge,vertex);
                     g.SetExplored(edge);
                     q.push(edge);
                 }
