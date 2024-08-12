@@ -48,7 +48,7 @@ public:
         m_e = E;
         m_adj_list.clear();
         m_explored.assign(m_v, false);
-        edgeTo.assign(m_v, 0);
+        m_edgeTo.assign(m_v, 0);
         m_id.assign(m_v, 0);
     }
 
@@ -78,44 +78,6 @@ public:
         return m_e;
     }
 
-    // Depth first search
-    void dfs(const T& v)
-    {
-        m_explored[v] = true;
-        m_id[v] = m_cc_count;
-        for (const auto& edge : this->adj(v))
-        {
-            if (!m_explored[edge])
-            {
-                edgeTo[edge] = v;
-                dfs(edge);
-            }
-        }
-    }
-
-    // Breadth first search
-    void bfs(const T& v)
-    {
-        m_explored[v] = true;
-        std::queue<T> q;
-        q.push(v);
-
-        while (!q.empty())
-        {
-            T vertex = q.front();
-            q.pop();
-            for (const auto& edge : this->adj(vertex))
-            {
-                if (!m_explored[edge])
-                {
-                    edgeTo[edge] = vertex;
-                    m_explored[edge] = true;
-                    q.push(edge);
-                }
-            }
-        }
-    }
-
     bool isGraphConnected() const
     {
         std::size_t explored_accumulator = 0;
@@ -129,7 +91,7 @@ public:
         return explored_accumulator == m_v;
     }
 
-    std::vector<T> PathTo(T s, T v) const
+    std::vector<T> PathTo(const T &s, const T & v) const
     {
         if (!hasPathTo(v))
         {
@@ -137,11 +99,14 @@ public:
             return {};
         }
         std::vector<T> path;
-        for (T x = v; x != s; x = edgeTo[x])
+
+        for (T x = v; x != s; x = m_edgeTo[x])
         {
             path.push_back(x);
         }
         path.push_back(s);
+        for (auto element : path)
+            std::cout << element << "\n";
         return path;
     }
 
@@ -150,21 +115,40 @@ public:
         std::fill(m_explored.begin(), m_explored.end(), false);
     }
 
-    void cc()
-    {
-        for (std::size_t s = 0; s < m_v; s++)
-        {
-            if (!m_explored[s])
-            {
-                this->dfs(s);
-                m_cc_count++;
-            }
-        }
-    }
 
     const int& Get_cc_Count() const
     {
         return m_cc_count;
+    }
+
+    bool Explored(const T & v)
+    {
+        return m_explored[v];
+    }
+
+    void SetExplored(const T & v)
+    {
+        m_explored[v] = true;
+    }
+
+    void SetEdgeTo(const T & e, const T & v)
+    {
+        m_edgeTo[e] = v; 
+    }
+
+    void SetId(const T & v, const int & count)
+    {
+        m_id[v] = count;
+    }
+
+    const int & Get_CC_Count() const 
+    {
+        return m_cc_count;
+    }
+
+    void incrementCC_Count(int amount)
+    {
+        m_cc_count += amount;
     }
 
     const std::size_t& Get_vertex_id(const std::size_t& v) const
@@ -177,9 +161,17 @@ public:
         return m_id[v] == m_id[w];
     }
 
-    friend void drawGraph<T>(std::ostream &out, const Graph<T>& graph, bool digraph);
+    bool hasPathTo(const T &v) const
+    {
+        return m_explored[v];
+    }
+
+
+    friend void drawGraph<>(std::ostream &out, const Graph<T>& graph, bool digraph);
+
 
 private:
+
     int m_v; // number of vertices
     int m_e; // number of edges
     adj_list_t m_adj_list; // adjacency list
@@ -187,14 +179,12 @@ private:
     std::vector<bool> m_explored;
     std::vector<std::size_t> m_id;
     int m_cc_count; // connected components count
-    std::vector<T> edgeTo;
-
-    bool hasPathTo(T v) const
-    {
-        return m_explored[v];
-    }
+    std::vector<T> m_edgeTo;
+    
 };
 
+
+/// Move below to a different file called Graph_Algo
 template <typename T>
 void drawGraph(std::ostream &out, const Graph<T>& graph, bool digraph)
 {
@@ -213,3 +203,60 @@ void drawGraph(std::ostream &out, const Graph<T>& graph, bool digraph)
     }
     out << "}\n";
 }
+
+
+
+
+/** Depth first search for connected Componets */
+template <typename T> 
+void dfs( Graph<T> & g , const T& v)
+{
+    g.SetExplored(v);
+
+    g.SetId(v, g.Get_CC_Count());
+    for (const auto& edge : g.adj(v))
+    {
+        if (!g.Explored(edge))
+        {
+                g.SetEdgeTo(edge,v);
+                dfs<int>(g,edge);
+        }
+    }
+} // end of the function DFS 
+
+template <typename T>
+void cc(Graph<T> &g)
+{
+    for (std::size_t s = 0; s < g.Get_vertices_number(); s++)
+    {
+        if (!g.Explored(s))
+        {
+            dfs<int>(g,s);
+            g.incrementCC_Count(1);
+        }
+        }    
+}
+
+// Breadth first search
+template <typename T>
+    void bfs(Graph<T> &g,const T& v)
+    {
+        g.SetExplored(v);
+        std::queue<T> q;
+        q.push(v);
+
+        while (!q.empty())
+        {
+            T vertex = q.front();
+            q.pop();
+            for (const auto& edge : g.adj(vertex))
+            {
+                if (!g.Explored(edge))
+                {
+                    g.SetEdgeTo(edge,vertex);
+                    g.SetExplored(edge);
+                    q.push(edge);
+                }
+            }
+        }
+    }
