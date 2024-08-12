@@ -166,16 +166,21 @@ public:
         return m_explored[v];
     }
 
+    bool hasCycle() const 
+    {
+        return isCyclic;
+    }
+
 
     friend void drawGraph<>(std::ostream &out, const Graph<T>& graph, bool digraph);
-
 
 private:
 
     int m_v; // number of vertices
     int m_e; // number of edges
     adj_list_t m_adj_list; // adjacency list
-    bool m_connected;
+    bool isConnected;
+    bool isCyclic;
     std::vector<bool> m_explored;
     std::vector<std::size_t> m_id;
     int m_cc_count; // connected components count
@@ -207,56 +212,3 @@ void drawGraph(std::ostream &out, const Graph<T>& graph, bool digraph)
 
 
 
-/** Depth first search for connected Componets */
-template <typename T> 
-void dfs( Graph<T> & g , const T& v)
-{
-    g.SetExplored(v);
-
-    g.SetId(v, g.Get_CC_Count());
-    for (const auto& edge : g.adj(v))
-    {
-        if (!g.Explored(edge))
-        {
-                g.SetEdgeTo(edge,v);
-                dfs<int>(g,edge);
-        }
-    }
-} // end of the function DFS 
-
-template <typename T>
-void cc(Graph<T> &g)
-{
-    for (std::size_t s = 0; s < g.Get_vertices_number(); s++)
-    {
-        if (!g.Explored(s))
-        {
-            dfs<int>(g,s);
-            g.incrementCC_Count(1);
-        }
-        }    
-}
-
-// Breadth first search
-template <typename T>
-    void bfs(Graph<T> &g,const T& v)
-    {
-        g.SetExplored(v);
-        std::queue<T> q;
-        q.push(v);
-
-        while (!q.empty())
-        {
-            T vertex = q.front();
-            q.pop();
-            for (const auto& edge : g.adj(vertex))
-            {
-                if (!g.Explored(edge))
-                {
-                    g.SetEdgeTo(edge,vertex);
-                    g.SetExplored(edge);
-                    q.push(edge);
-                }
-            }
-        }
-    }

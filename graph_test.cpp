@@ -9,6 +9,7 @@
 #include <queue>
 #include <gtest/gtest.h>
 #include "Graph.hpp"
+#include "GraphAlgo.hpp"
 
 using namespace std;
 
