@@ -39,15 +39,21 @@ TEST(TestTopic, ConnectedComponents)
 TEST(TestTopic, ShortestPath)
 {
     std::cout << "Tests Shortest Path Via Breadth First Search\n";
-    const std::string graph_data_file(ROOT_DIR + GRAPH_FILENAMES [1]);
+    const std::string graph_data_file(ROOT_DIR + GRAPH_FILENAMES [0]);
     auto file = ifstream(graph_data_file);
     Graph<int> tinyG(file, Graph_Input_type::EXPLICIT);
-    tinyG.bfs(0); // starting at zero 
+    bfs<int>(tinyG,0);
     auto result = tinyG.PathTo(0,5);
-    EXPECT_EQ(result[0],5) << "Testing tinyCG\n";
-    EXPECT_EQ(result[1],0) << "Testing tinyCG\n";
-    result = tinyG.PathTo(0,4);
-    EXPECT_EQ(result[0],4) << "Testing tinyCG\n";
-    EXPECT_EQ(result[1],2) << "Testing tinyCG\n";
-    EXPECT_EQ(result[2],0) << "Testing tinyCG\n";
+    EXPECT_EQ(result[0],5) << "Testing tinyG\n";
+    EXPECT_EQ(result[1],0) << "Testing tinyG\n";
+    
+    result = tinyG.PathTo(0,3);
+    EXPECT_EQ(result[0],3) << "Testing tinyG\n";
+    EXPECT_EQ(result[1],5) << "Testing tinyG\n";
+    EXPECT_EQ(result[2],0) << "Testing tinyG\n";
+
+    result = tinyG.PathTo(0,6);
+    EXPECT_EQ(result[0],6) << "Testing tinyG\n";
+    EXPECT_EQ(result[1],0) << "Testing tinyG\n";
+    //EXPECT_EQ(result[2],0) << "Testing tinyG\n";
 }
