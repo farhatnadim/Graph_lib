@@ -171,6 +171,11 @@ public:
         return isCyclic;
     }
 
+    void SetCyclic()
+    {
+        isCyclic = true;
+    }
+
 
     friend void drawGraph<>(std::ostream &out, const Graph<T>& graph, bool digraph);
 
