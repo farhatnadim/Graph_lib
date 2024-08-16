@@ -20,8 +20,7 @@
 
 template <typename T>
 void detect_cycle (Graph<T> & g) 
-{   
-    
+{      
  for (std::size_t s = 0; s < g.Get_vertices_number(); s++)
     {
         if (!g.Explored(s))
@@ -29,8 +28,8 @@ void detect_cycle (Graph<T> & g)
             dfs<int>(g,s,s);
         }
     }    
-    
 }
+// 4 
 
 
 

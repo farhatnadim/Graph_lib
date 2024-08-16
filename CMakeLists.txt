@@ -28,5 +28,6 @@ if(BUILD_TESTING)
     gtest_discover_tests(GraphTest)
 endif()
 
+add_executable(GraphDraw drawGraph.cpp)
 
 target_sources(GraphTest PRIVATE ${SOURCES} ${HEADERS})

@@ -59,3 +59,20 @@ TEST(TestTopic, ShortestPath)
     //EXPECT_EQ(result[2],0) << "Testing tinyG\n";
 }
 
+TEST(TestTopic, Cycle)
+{
+    std::cout << "Tests cycle detection in a graph\n";
+    const std::string graph_data_file(ROOT_DIR + "NoCycle.txt");
+    auto file = ifstream(graph_data_file);
+    Graph<int> NoCycle(file, Graph_Input_type::EXPLICIT);
+    drawGraph(cout,NoCycle,true);
+    //detect_cycle<int>(NoCycle);
+   // bool result = NoCycle.HasCycle();
+    //EXPECT_EQ(result,false);
+    /**
+    const std::string graph_data_file2(ROOT_DIR + "YesCycle.txt");
+    auto file2 = ifstream(graph_data_file2);
+    Graph<int> YesCycle(file2, Graph_Input_type::EXPLICIT);
+    EXPECT_EQ(result,true);
+    */
+}

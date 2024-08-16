@@ -166,7 +166,7 @@ public:
         return m_explored[v];
     }
 
-    bool hasCycle() const 
+    bool HasCycle() const 
     {
         return isCyclic;
     }
