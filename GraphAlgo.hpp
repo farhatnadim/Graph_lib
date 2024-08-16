@@ -25,7 +25,7 @@ void detect_cycle (Graph<T> & g)
     {
         if (!g.Explored(s))
         {
-            dfs<int>(g,s,s);
+            dfs<T>(g,s,s);
         }
     }    
 }
@@ -43,11 +43,13 @@ void dfs( Graph<T> & g , const T& v, const T & s = {})
     {
         if (!g.Explored(edge))
         {
-                g.SetEdgeTo(edge,v);
-                dfs<int>(g,edge,v);
+            g.SetEdgeTo(edge,v);
+            dfs<T>(g,edge,v);
         }
         else if ( edge != s )
+        {
             g.SetCyclic();
+        }
     }
 } // end of the function DFS 
 

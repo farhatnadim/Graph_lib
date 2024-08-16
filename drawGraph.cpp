@@ -7,7 +7,8 @@ using std::cout, std::ifstream, std::ofstream;
 
 int main(int argc, char *argv[])
 {
-    if (argc != 3) {
+    if (argc != 3)
+    {
         std::cerr << "Usage: " << argv[0] << " <input_graph_file> <output_dot_file>\n";
         return 1;
     }
@@ -18,13 +19,13 @@ int main(int argc, char *argv[])
     std::cout << "Testing cycle detection in a graph\n";
     
     auto file = ifstream(input_file);
-    if (!file) {
+    if (!file) 
+    {
         std::cerr << "Error opening input file: " << input_file << "\n";
         return 1;
     }
 
     Graph<int> NoCycle(file, Graph_Input_type::EXPLICIT);
-    drawGraph(cout, NoCycle, true);
     file.close();
 
     auto out_file = ofstream(output_file);
@@ -33,8 +34,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    drawGraph(out_file, NoCycle, true);
+    //drawGraph(out_file, NoCycle, false);
+    detect_cycle(NoCycle);
+    cout << "HERE\n"  << (NoCycle.HasCycle() ? "Cyclic" : "Not Cyclic");
     out_file.close();
-
     return 0;
 }

@@ -65,10 +65,9 @@ TEST(TestTopic, Cycle)
     const std::string graph_data_file(ROOT_DIR + "NoCycle.txt");
     auto file = ifstream(graph_data_file);
     Graph<int> NoCycle(file, Graph_Input_type::EXPLICIT);
-    drawGraph(cout,NoCycle,true);
-    //detect_cycle<int>(NoCycle);
-   // bool result = NoCycle.HasCycle();
-    //EXPECT_EQ(result,false);
+    detect_cycle<int>(NoCycle);
+    bool result = NoCycle.HasCycle();
+    EXPECT_EQ(result,false);
     /**
     const std::string graph_data_file2(ROOT_DIR + "YesCycle.txt");
     auto file2 = ifstream(graph_data_file2);
