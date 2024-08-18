@@ -16,7 +16,7 @@ enum class Graph_Input_type { IMPLICIT, EXPLICIT };
 template <typename T>
 class Graph
 {
-    using edges_t = std::set<T>;
+    using edges_t = std::vector<T>;
     using adj_list_t = std::map<T, edges_t>;
 
 public:
@@ -54,8 +54,8 @@ public:
 
     void addEdge(T v, T w)
     {
-        m_adj_list[v].insert(w);
-        m_adj_list[w].insert(v);
+        m_adj_list[v].push_back(w);
+        m_adj_list[w].push_back(v);
     }
 
     edges_t adj(T v) const

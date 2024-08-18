@@ -18,6 +18,7 @@ if [ -f "$output_dot_file" ]; then
     dot -Tpng "$output_dot_file" -o "$output_png_file"
     
     if [ $? -eq 0 ]; then
+        echo " "
         echo "PNG generated successfully: $output_png_file"
     else
         echo "Error generating PNG."

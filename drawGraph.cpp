@@ -36,7 +36,20 @@ int main(int argc, char *argv[])
 
     //drawGraph(out_file, NoCycle, false);
     detect_cycle(NoCycle);
-    cout << "HERE\n"  << (NoCycle.HasCycle() ? "Cyclic" : "Not Cyclic");
+    if(NoCycle.HasCycle())
+       cout << "Cycle\n";
+    else
+       cout << "No Cycle\n";
+    {
+        for (auto & [vertex, edges] : NoCycle.adj_list())
+         {  
+            for (auto && edge : edges )
+                {
+                    cout << vertex << " " << edge <<  " ";
+                }
+                cout << "\n";
+         }
+    }
     out_file.close();
     return 0;
 }
