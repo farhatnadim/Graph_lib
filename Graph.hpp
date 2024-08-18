@@ -22,7 +22,7 @@ class Graph
 public:
     // Constructors
    
-    Graph(std::ifstream& f, Graph_Input_type input) : m_cc_count{0}
+    Graph(std::ifstream& f, Graph_Input_type input) : m_cc_count{0}, isCyclic{false}
     {
         std::string edges;
         std::string vertices;
