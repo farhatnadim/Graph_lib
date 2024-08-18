@@ -16,13 +16,13 @@ enum class Graph_Input_type { IMPLICIT, EXPLICIT };
 template <typename T>
 class Graph
 {
-    using edges_t = std::set<T>;
+    using edges_t = std::vector<T>;
     using adj_list_t = std::map<T, edges_t>;
 
 public:
     // Constructors
    
-    Graph(std::ifstream& f, Graph_Input_type input) : m_cc_count{0}
+    Graph(std::ifstream& f, Graph_Input_type input) : m_cc_count{0}, isCyclic{false}
     {
         std::string edges;
         std::string vertices;
@@ -54,8 +54,8 @@ public:
 
     void addEdge(T v, T w)
     {
-        m_adj_list[v].insert(w);
-        m_adj_list[w].insert(v);
+        m_adj_list[v].push_back(w);
+        m_adj_list[w].push_back(v);
     }
 
     edges_t adj(T v) const
@@ -166,9 +166,14 @@ public:
         return m_explored[v];
     }
 
-    bool hasCycle() const 
+    bool HasCycle() const 
     {
         return isCyclic;
+    }
+
+    void SetCyclic()
+    {
+        isCyclic = true;
     }
 
 

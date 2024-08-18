@@ -5,19 +5,37 @@
 // Should they be in classes ? I am not sure. 
 
 #include "Graph.hpp"
+#include <functional>
+#include <queue>
 
-/**
-template <typename T>
-void detect_cycle<T> (Graph<T> G) 
-{   
-    
 
-    
-}
-*/
+
+
 /** Depth first search for connected Componets */
+
+
+
+//According to Lumsdaine , Graph Boost Maintainer, DFS and BFS should be 
+// a type of Generic data structure accessors but I guess i will leave it for later because the focus is exposure to graphs
+// not software engineering arround a graph
+
+template <typename T>
+void detect_cycle (Graph<T> & g) 
+{      
+ for (std::size_t s = 0; s < g.Get_vertices_number(); s++)
+    {
+        if (!g.Explored(s))
+        {
+            dfs<T>(g,s,s);
+        }
+    }    
+}
+// 4 
+
+
+
 template <typename T> 
-void dfs( Graph<T> & g , const T& v)
+void dfs( Graph<T> & g , const T& v, const T & s = {})
 {
     g.SetExplored(v);
 
@@ -26,8 +44,12 @@ void dfs( Graph<T> & g , const T& v)
     {
         if (!g.Explored(edge))
         {
-                g.SetEdgeTo(edge,v);
-                dfs<int>(g,edge);
+            g.SetEdgeTo(edge,v);
+            dfs<T>(g,edge,v);
+        }
+        else if ( edge != s )
+        {
+            g.SetCyclic();
         }
     }
 } // end of the function DFS 
