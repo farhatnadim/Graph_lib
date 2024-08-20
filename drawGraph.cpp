@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    Graph<int> NoCycle(file, Graph_Input_type::EXPLICIT);
+    Graph<int> Digraph(file, Graph_Input_type::EXPLICIT,true);
     file.close();
 
     auto out_file = ofstream(output_file);
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    drawGraph(out_file, NoCycle, false);
+    drawGraph(out_file, reverse_graph<int>(Digraph));
     
     out_file.close();
     return 0;

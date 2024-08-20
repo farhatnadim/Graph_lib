@@ -30,10 +30,7 @@ void detect_cycle (Graph<T> & g)
         }
     }    
 }
-// 4 
-
-
-
+// Deep first search
 template <typename T> 
 void dfs( Graph<T> & g , const T& v, const T & s = {})
 {
@@ -89,4 +86,19 @@ template <typename T>
                 }
             }
         }
+    }
+
+
+    template <typename T> 
+    Graph<T> reverse_graph(Graph<T> input)
+    {
+        auto g = input;
+        for (int v = 0; v < input.Get_vertices_number(); v++)
+        {
+            for (auto && edge : input.adj(v))
+            {
+                g.addEdge(edge,v);
+            }
+        }
+        return g;
     }

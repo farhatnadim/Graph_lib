@@ -10,7 +10,7 @@
 #include <queue>
 
 // Inspired by Sedgewick's Graph implementation (page 540)
-// Since 
+// Since the
 
 enum class Graph_Input_type { IMPLICIT, EXPLICIT };
 
@@ -22,7 +22,11 @@ class Graph
 
 public:
     // Constructors
-   
+    Graph (int V)
+    {   
+        initialize_explicit(0,0);
+    }
+
     Graph(std::ifstream& f, Graph_Input_type input, bool diGraph = false) : m_cc_count{0}, isCyclic{false}, isDigraph{diGraph}
     {
         std::string edges;
@@ -40,9 +44,7 @@ public:
             }
          }
         
-    }
-
-
+        }
     void initialize_explicit(int V, int E)
     {
         m_v = V;
@@ -183,8 +185,12 @@ public:
         m_e = n_edges;
     }
 
+    bool Digraph()
+    { 
+        return isDigraph;
+    }
 
-    friend void drawGraph<>(std::ostream &out, const Graph<T>& graph, bool digraph);
+    friend void drawGraph<>(std::ostream &out, const Graph<T>& graph);
 
 protected:
     int m_v; // number of vertices
@@ -206,14 +212,16 @@ private:
 
 /// Move below to a different file called Graph_Algo
 template <typename T>
-void drawGraph(std::ostream &out, const Graph<T>& graph, bool digraph)
+void drawGraph(std::ostream &out, const Graph<T>& graph)
 {
     using adj_list_t = typename Graph<T>::adj_list_t;
     using edges_t = typename Graph<T>::edges_t;
 
     const adj_list_t& list = graph.m_adj_list;
-    std::string graph_type = digraph ? "digraph" : "graph";
-    std::string edge_type = digraph ? " -> " : " -- ";
+  
+    const bool isDigraph = graph.Digraph();
+    std::string graph_type = isDigraph   ? "digraph" : "graph";
+    std::string edge_type = isDigraph   ? " -> " : " -- ";
 
     out << graph_type << " G {" << "\n";
     for (const auto& [key, edges] : list)
