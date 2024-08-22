@@ -24,7 +24,7 @@ public:
     // Constructors
     Graph (int V)
     {   
-        initialize_explicit(0,0);
+        initialize_explicit(V,0);
     }
 
     Graph(std::ifstream& f, Graph_Input_type input, bool diGraph = false) : m_cc_count{0}, isCyclic{false}, isDigraph{diGraph}
@@ -185,9 +185,14 @@ public:
         m_e = n_edges;
     }
 
-    bool Digraph()
+    bool Digraph() const
     { 
         return isDigraph;
+    }
+
+    void SetDigraph() 
+    { 
+        isDigraph = true;
     }
 
     friend void drawGraph<>(std::ostream &out, const Graph<T>& graph);

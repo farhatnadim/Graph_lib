@@ -90,14 +90,21 @@ template <typename T>
 
 
     template <typename T> 
-    Graph<T> reverse_graph(Graph<T> input)
-    {
-        auto g = input;
-        for (int v = 0; v < input.Get_vertices_number(); v++)
+    Graph<T> reverse_graph( const Graph<T> & input)
+    {   
+        //
+        if (!input.Digraph())
         {
-            for (auto && edge : input.adj(v))
+            std::cout << "Not implemented for none digraph \n";
+            return input;
+        }
+        auto g = Graph<T>(input.Get_vertices_number());
+        g.SetDigraph();
+        for (auto && [vertex, edges] : input.adj_list())
+        {
+            for (auto && edge : edges)
             {
-                g.addEdge(edge,v);
+                g.addEdge(edge,vertex);
             }
         }
         return g;
