@@ -30,10 +30,7 @@ void detect_cycle (Graph<T> & g)
         }
     }    
 }
-// 4 
-
-
-
+// Deep first search
 template <typename T> 
 void dfs( Graph<T> & g , const T& v, const T & s = {})
 {
@@ -89,4 +86,26 @@ template <typename T>
                 }
             }
         }
+    }
+
+
+    template <typename T> 
+    Graph<T> reverse_graph( const Graph<T> & input)
+    {   
+        //
+        if (!input.Digraph())
+        {
+            std::cout << "Not implemented for none digraph \n";
+            return input;
+        }
+        auto g = Graph<T>(input.Get_vertices_number());
+        g.SetDigraph();
+        for (auto && [vertex, edges] : input.adj_list())
+        {
+            for (auto && edge : edges)
+            {
+                g.addEdge(edge,vertex);
+            }
+        }
+        return g;
     }

@@ -10,19 +10,24 @@
 #include <queue>
 
 // Inspired by Sedgewick's Graph implementation (page 540)
+// Since the
 
 enum class Graph_Input_type { IMPLICIT, EXPLICIT };
 
 template <typename T>
 class Graph
 {
-    using edges_t = std::vector<T>;
+    using edges_t = std::set<T>;
     using adj_list_t = std::map<T, edges_t>;
 
 public:
     // Constructors
-   
-    Graph(std::ifstream& f, Graph_Input_type input) : m_cc_count{0}, isCyclic{false}
+    Graph (int V)
+    {   
+        initialize_explicit(V,0);
+    }
+
+    Graph(std::ifstream& f, Graph_Input_type input, bool diGraph = false) : m_cc_count{0}, isCyclic{false}, isDigraph{diGraph}
     {
         std::string edges;
         std::string vertices;
@@ -39,9 +44,7 @@ public:
             }
          }
         
-    }
-
-
+        }
     void initialize_explicit(int V, int E)
     {
         m_v = V;
@@ -54,8 +57,9 @@ public:
 
     void addEdge(T v, T w)
     {
-        m_adj_list[v].push_back(w);
-        m_adj_list[w].push_back(v);
+        m_adj_list[v].insert(w);
+        if(!isDigraph)
+            m_adj_list[w].insert(v);
     }
 
     edges_t adj(T v) const
@@ -176,34 +180,53 @@ public:
         isCyclic = true;
     }
 
+    void SetEdgeNumber(int n_edges)
+    { 
+        m_e = n_edges;
+    }
 
-    friend void drawGraph<>(std::ostream &out, const Graph<T>& graph, bool digraph);
+    bool Digraph() const
+    { 
+        return isDigraph;
+    }
 
-private:
+    void SetDigraph() 
+    { 
+        isDigraph = true;
+    }
 
+    friend void drawGraph<>(std::ostream &out, const Graph<T>& graph);
+
+protected:
     int m_v; // number of vertices
     int m_e; // number of edges
+private:    
     adj_list_t m_adj_list; // adjacency list
     bool isConnected;
     bool isCyclic;
+    bool isDigraph;
     std::vector<bool> m_explored;
     std::vector<std::size_t> m_id;
     int m_cc_count; // connected components count
     std::vector<T> m_edgeTo;
+
     
 };
 
 
+
 /// Move below to a different file called Graph_Algo
 template <typename T>
-void drawGraph(std::ostream &out, const Graph<T>& graph, bool digraph)
+void drawGraph(std::ostream &out, const Graph<T>& graph)
 {
     using adj_list_t = typename Graph<T>::adj_list_t;
     using edges_t = typename Graph<T>::edges_t;
 
     const adj_list_t& list = graph.m_adj_list;
-    std::string graph_type = digraph ? "digraph" : "graph";
-    std::string edge_type = digraph ? " -> " : " -- ";
+  
+    const bool isDigraph = graph.Digraph();
+    std::string graph_type = isDigraph   ? "digraph" : "graph";
+    std::string edge_type = isDigraph   ? " -> " : " -- ";
 
     out << graph_type << " G {" << "\n";
     for (const auto& [key, edges] : list)
