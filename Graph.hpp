@@ -11,6 +11,12 @@
 
 // Inspired by Sedgewick's Graph implementation (page 540)
 // Since the
+template <typename T>
+class Graph;
+
+// Forward declare the drawGraph function template
+template <typename T>
+void drawGraph(std::ostream &out, const Graph<T>& graph);
 
 enum class Graph_Input_type { IMPLICIT, EXPLICIT };
 
@@ -195,7 +201,7 @@ public:
         isDigraph = true;
     }
 
-    friend void drawGraph<>(std::ostream &out, const Graph<T>& graph);
+    friend void drawGraph<T>(std::ostream &out, const Graph<T>& graph);
 
 protected:
     int m_v; // number of vertices
