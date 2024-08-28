@@ -67,7 +67,7 @@ void cc(Graph<T> &g)
 // Breadth first search
 template <typename T>
     void bfs(Graph<T> &g,const T& v)
-    {
+{
         g.SetExplored(v);
         std::queue<T> q;
         q.push(v);
@@ -109,3 +109,4 @@ template <typename T>
         }
         return g;
     }
+    

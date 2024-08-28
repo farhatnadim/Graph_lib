@@ -35,7 +35,15 @@ int main(int argc, char *argv[])
     }
 
     drawGraph(out_file, reverse_graph<int>(Digraph));
-    
+ 
+    int counter = 0;
+    //dfs(Digraph,1);
+    for ( auto && element : Digraph.GetExplored())
+    {
+        if (element) 
+            cout << counter << " ";
+        counter++;
+    }
     out_file.close();
     return 0;
 }

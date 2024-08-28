@@ -140,6 +140,10 @@ public:
     {
         m_explored[v] = true;
     }
+    const std::vector<bool> & GetExplored()
+    {
+        return m_explored;
+    }
 
     void SetEdgeTo(const T & e, const T & v)
     {
