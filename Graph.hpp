@@ -69,8 +69,18 @@ public:
     }
 
     edges_t adj(T v) const
-    {
-        return m_adj_list.at(v);
+    {   
+        try 
+        {
+            return m_adj_list.at(v);
+        }
+        catch (std::out_of_range & e)
+        {
+            std::cerr << "Exception caught: " << e.what() << '\n';
+
+        }
+
+        
     }
 
     adj_list_t adj_list() const
