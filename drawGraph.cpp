@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     drawGraph(out_file, reverse_graph<int>(Digraph));
     drawGraph(cout,Digraph);
     int counter = 0;
-    dfs<int>(Digraph,0);
+    dfs(Digraph,0);
     for ( auto && element : Digraph.GetExplored())
     {
         if (element) 

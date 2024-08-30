@@ -62,11 +62,25 @@ public:
     }
 
     void addEdge(T v, T w)
+{  
+    m_adj_list[v].insert(w);
+
+    if (!isDigraph)
     {
-        m_adj_list[v].insert(w);
-        if(!isDigraph)
-            m_adj_list[w].insert(v);
+        // If it's an undirected graph, add the reverse edge as well
+        m_adj_list[w].insert(v);
     }
+    else
+    {
+        // If it's a directed graph, ensure the destination node exists in the adjacency list
+        if (m_adj_list.find(w) == m_adj_list.end())
+        {
+            m_adj_list[w] = edges_t(); // Create an empty entry for node w
+        }
+    }
+
+    m_e++;  // Increment edge count
+}
 
     edges_t adj(T v) const
     {   
@@ -76,11 +90,8 @@ public:
         }
         catch (std::out_of_range & e)
         {
-            std::cerr << "Exception caught: " << e.what() << '\n';
-
+            std::cerr << "Exception caught: the  " << v  << "  " << e.what() << '\n';
         }
-
-        
     }
 
     adj_list_t adj_list() const
