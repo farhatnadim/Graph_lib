@@ -73,3 +73,43 @@ TEST(Undirected_Graph, DetectCycle)
     result = YesCycle.HasCycle();
     EXPECT_EQ(result,true);
 }
+
+// test directed graph dfs from multiple sources
+// if single source of 1 , it returns 1
+// if single source of 2 , it returns 0,1,2,4,5
+// if multiple sources of 1,2,6 it return 0,1,2,3,4,5,6,8,9,10,11,12
+
+TEST(Directed_Graph, DFSFromMultipleSources)
+{
+    std::cout << "Tests DFS from multiple sources in a directed graph\n";
+    auto graph_data_file = string(ROOT_DIR + "tinyDG.txt");
+    auto file = ifstream(graph_data_file);
+    Graph<int> tinyDG(file, Graph_Input_type::EXPLICIT, true);
+   
+
+    // Test single source 1
+    directed_dfs<int>(tinyDG, {1});
+    auto result = tinyDG.PathTo(1, 1);
+    EXPECT_EQ(result.size(), 1);
+    EXPECT_EQ(result[0], 1) << "Testing single source 1\n";
+
+    // Test single source 2
+    tinyDG.reset_explored();
+    directed_dfs<int>(tinyDG, {2});
+    result = tinyDG.PathTo(2, 5);
+    std::vector<int> expected_path_2 = {5, 0, 2};
+    EXPECT_EQ(result, expected_path_2) << "Testing single source 2\n";
+
+    // Test multiple sources 1, 2, 6
+    tinyDG.reset_explored();
+    directed_dfs<int>(tinyDG, {1, 2, 6});
+    std::vector<int> expected_vertices = {0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12};
+    for (const auto& vertex : expected_vertices)
+    {
+        EXPECT_TRUE(tinyDG.Explored(vertex)) << "Vertex " << vertex << " should be explored\n";
+    }
+}
+
+
+
+

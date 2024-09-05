@@ -51,6 +51,17 @@ void dfs( Graph<T> & g , const T& v, const T & s = {})
     }
 } // end of the function DFS 
 
+template <typename T> 
+void directed_dfs (Graph <T> & g , const std::vector<T> &sources)
+{
+    g.reset_explored();
+    for ( auto && source : sources)
+    {
+        if (!g.Explored(source))
+            dfs(g,source);
+    }
+}
+
 template <typename T>
 void cc(Graph<T> &g)
 {
