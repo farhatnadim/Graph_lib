@@ -14,12 +14,10 @@
 using namespace std;
 
 
-std::vector<std::string> GRAPH_FILENAMES {"tinyG.txt","tinyCG.txt"};
+std::vector<std::string> GRAPH_FILENAMES {"tinyG.txt","tinyCG.txt","tinyDG.txt"};
 const std::string ROOT_DIR = "../data/";
 
-
-
-TEST(TestTopic, ConnectedComponents)
+TEST(Undirected_Graph, ConnectedComponents)
 {
     std::string graph_data_file(ROOT_DIR + GRAPH_FILENAMES[0]);
     auto file = ifstream(graph_data_file);
@@ -37,7 +35,7 @@ TEST(TestTopic, ConnectedComponents)
     file.close();
 }
 
-TEST(TestTopic, ShortestPath)
+TEST(Undirected_Graph, ShortestPath)
 {
     std::cout << "Tests Shortest Path Via Breadth First Search\n";
     const std::string graph_data_file(ROOT_DIR + GRAPH_FILENAMES [0]);
@@ -59,14 +57,19 @@ TEST(TestTopic, ShortestPath)
     //EXPECT_EQ(result[2],0) << "Testing tinyG\n";
 }
 
-TEST(TestTopic, Cycle)
+TEST(Undirected_Graph, DetectCycle)
 {
     std::cout << "Tests cycle detection in a graph\n";
-    const std::string graph_data_file(ROOT_DIR + "NoCycle.txt");
+    auto graph_data_file = string(ROOT_DIR + "NoCycle.txt");
     auto file = ifstream(graph_data_file);
     Graph<int> NoCycle(file, Graph_Input_type::EXPLICIT);
     detect_cycle<int>(NoCycle);
     bool result = NoCycle.HasCycle();
     EXPECT_EQ(result,false);
- 
+    graph_data_file = string(ROOT_DIR + "YesCycle.txt");
+    file = ifstream(graph_data_file);
+    Graph<int> YesCycle(file, Graph_Input_type::EXPLICIT);
+    detect_cycle<int>(YesCycle);
+    result = YesCycle.HasCycle();
+    EXPECT_EQ(result,true);
 }

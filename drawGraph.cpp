@@ -15,8 +15,6 @@ int main(int argc, char *argv[])
 
     std::string input_file = argv[1];
     std::string output_file = argv[2];
-
-    std::cout << "Testing cycle detection in a graph\n";
     
     auto file = ifstream(input_file);
     if (!file) 
@@ -35,15 +33,15 @@ int main(int argc, char *argv[])
     }
 
     drawGraph(out_file, reverse_graph<int>(Digraph));
-    drawGraph(cout,Digraph);
     int counter = 0;
-    dfs(Digraph,0);
+    dfs(Digraph,6);
     for ( auto && element : Digraph.GetExplored())
     {
         if (element) 
             cout << counter << " ";
         counter++;
     }
+    cout << "\n";
     out_file.close();
     return 0;
 }
