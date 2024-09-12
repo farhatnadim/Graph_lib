@@ -57,6 +57,7 @@ public:
         m_e = E;
         m_adj_list.clear();
         m_explored.assign(m_v, false);
+        on_stack.assign(m_v, false);
         m_edgeTo.assign(m_v, 0);
         m_id.assign(m_v, 0);
     }
@@ -110,7 +111,7 @@ public:
     }
 
     bool isGraphConnected() const
-    {
+    { 
         std::size_t explored_accumulator = 0;
         for (const auto& element : m_explored)
         {
@@ -232,15 +233,18 @@ protected:
     int m_v; // number of vertices
     int m_e; // number of edges
 private:    
-    adj_list_t m_adj_list; // adjacency list
-    bool isConnected;
-    bool isCyclic;
-    bool isDigraph;
-    std::vector<bool> m_explored;
-    std::vector<std::size_t> m_id;
+   
+    bool isConnected; // Is the graph connected
+    bool isCyclic; // Is the graph cyclic
+    bool isDigraph; // Is the graph a directed graph
     int m_cc_count; // connected components count
-    std::vector<T> m_edgeTo;
 
+    std::vector<T> m_edgeTo; // edge to vertex
+    std::vector<bool> m_explored; //list of explored vertices
+    std::vector<std::size_t> m_id; // connected components id
+    std::stack<T> m_cycle; // stack for returning the cycle
+    std::vector<bool> m_on_stack; // stack for checking if a vertex is on the stack
+    adj_list_t m_adj_list; // adjacency list
     
 };
 

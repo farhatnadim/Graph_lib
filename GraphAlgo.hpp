@@ -126,7 +126,7 @@ template <typename T>
     /**First we have to detect cycles  */
 
     template<typename T>
-    void directed_detect_cycle(const Graph<T> & g)
+    void directed_return_cycle(const Graph<T> & g);
     /**The recursive call in the DFS is a stack that contains the path under investigation
        if we find an edge that points to a vertex on the stack then we detect the cycle */
        
