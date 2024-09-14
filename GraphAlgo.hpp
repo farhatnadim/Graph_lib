@@ -124,9 +124,18 @@ template <typename T>
     /** Give a digraph put the vertices in order such that all its directed edges point from a ver
     vertex earlier in the order to a vertex later in the order  */
     /**First we have to detect cycles  */
-
+    // TODO: using explicit stack instead of recursion might obiviate the need for the cycle stack
     template<typename T>
-    void directed_return_cycle(const Graph<T> & g);
+    void directed_return_cycle(const Graph<T> & g, int v)
+    { 
+        std::stack<T> cycle;
+        g.Explored(v) = true;
+        g.OnStack(v) = true;
+        for (auto &&edge : g.adj(v))
+        {
+
+        }
+    }
     /**The recursive call in the DFS is a stack that contains the path under investigation
        if we find an edge that points to a vertex on the stack then we detect the cycle */
-       
+    

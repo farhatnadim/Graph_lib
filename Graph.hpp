@@ -57,7 +57,7 @@ public:
         m_e = E;
         m_adj_list.clear();
         m_explored.assign(m_v, false);
-        on_stack.assign(m_v, false);
+        m_on_stack.assign(m_v, false);
         m_edgeTo.assign(m_v, 0);
         m_id.assign(m_v, 0);
     }
@@ -125,7 +125,7 @@ public:
 
     std::vector<T> PathTo(const T &s, const T & v) const
     {
-        if (!hasPathTo(v))
+        if (!HasPathTo(v))
         {
             std::cout << "Warning! Did not find a path to the vertex " << v << std::endl;
             return {};
@@ -197,7 +197,7 @@ public:
         return m_id[v] == m_id[w];
     }
 
-    bool hasPathTo(const T &v) const
+    bool HasPathTo(const T &v) const
     {
         return m_explored[v];
     }
@@ -212,6 +212,8 @@ public:
         isCyclic = true;
     }
 
+
+
     void SetEdgeNumber(int n_edges)
     { 
         m_e = n_edges;
@@ -225,6 +227,11 @@ public:
     void SetDigraph() 
     { 
         isDigraph = true;
+    }
+
+    bool OnStack(const T & v)
+    {
+        return m_on_stack[v];
     }
 
     friend void drawGraph<T>(std::ostream &out, const Graph<T>& graph);
