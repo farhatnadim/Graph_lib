@@ -162,6 +162,11 @@ public:
     {
         m_explored[v] = true;
     }
+
+    void SetOnStack(const T & v)
+    {
+        m_on_stack[v] = true;
+    }
     const std::vector<bool> & GetExplored()
     {
         return m_explored;
@@ -172,6 +177,11 @@ public:
         m_edgeTo[e] = v; 
     }
 
+
+    T GetEdgeTo(const T & e)
+    {
+        return m_edgeTo[e] ;
+    }
     void SetId(const T & v, const int & count)
     {
         m_id[v] = count;
@@ -203,7 +213,12 @@ public:
     }
 
     bool HasCycle() const 
-    {
+    {   
+        // if directed graph , test the size of the m_cycle stack size
+        if (isDigraph)
+        {
+            return m_cycle.size() > 0;
+        }
         return isCyclic;
     }
 
@@ -211,8 +226,6 @@ public:
     {
         isCyclic = true;
     }
-
-
 
     void SetEdgeNumber(int n_edges)
     { 

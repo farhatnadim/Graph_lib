@@ -126,15 +126,31 @@ template <typename T>
     /**First we have to detect cycles  */
     // TODO: using explicit stack instead of recursion might obiviate the need for the cycle stack
     template<typename T>
-    void directed_return_cycle(const Graph<T> & g, int v)
+    std::vector<T>  directedDFS_return_cycle( Graph<T> & g, int v)
     { 
-        std::stack<T> cycle;
-        g.Explored(v) = true;
-        g.OnStack(v) = true;
+        std::vector<T> cycle;
+        g.SetExplored(v);
+        g.SetOnStack(v);
         for (auto &&edge : g.adj(v))
         {
-
+           
+            if (!g.Explored(edge))
+            {
+                g.SetEdgeTo(edge,v);
+                directedDFS_return_cycle(g,edge);
+            }
+            else if (g.OnStack(edge))
+            {
+                for (auto x = v; x != edge; x = g.GetEdgeTo(x))
+                {
+                    cycle.push_back(x);
+                }
+                cycle.push_back(edge);
+                cycle.push_back(v);
+            }
         }
+        
+        return cycle;
     }
     /**The recursive call in the DFS is a stack that contains the path under investigation
        if we find an edge that points to a vertex on the stack then we detect the cycle */

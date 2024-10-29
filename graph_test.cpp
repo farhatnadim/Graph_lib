@@ -110,6 +110,20 @@ TEST(Directed_Graph, DFSFromMultipleSources)
     }
 }
 
+TEST(Directed_Graph, DirectedDFS_HasCycle)
+{
+    std::cout << "Tests cycle detection in a directed graph\n";
+    auto graph_data_file = string(ROOT_DIR + "tinyDG.txt");
+    auto file = ifstream(graph_data_file);
+    Graph<int> DirectedCycle(file, Graph_Input_type::EXPLICIT, true);
+    auto cycle = directedDFS_return_cycle<int>(DirectedCycle, 0);
+    for (auto && element : cycle)
+    {
+        std::cout << element ;
+    }
+    
+    
+}
 
 
 
