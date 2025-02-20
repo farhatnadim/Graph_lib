@@ -32,15 +32,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    drawGraph(out_file, reverse_graph<int>(Digraph));
-    int counter = 0;
-    directed_dfs(Digraph,{1,2,6});
-    for ( auto && element : Digraph.GetExplored())
-    {
-        if (element) 
-            cout << counter << " ";
-        counter++;
-    }
+    auto cycle = directedDFS_return_cycle<int>(Digraph,0);
+    for ( auto && element : cycle)
+        cout << element ;
     cout << "\n";
     out_file.close();
     return 0;

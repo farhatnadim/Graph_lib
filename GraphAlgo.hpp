@@ -133,7 +133,7 @@ template <typename T>
         g.SetOnStack(v);
         for (auto &&edge : g.adj(v))
         {
-           
+           std::cout << edge << "\n";
             if (!g.Explored(edge))
             {
                 g.SetEdgeTo(edge,v);
