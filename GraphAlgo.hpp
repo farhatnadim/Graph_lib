@@ -69,10 +69,10 @@ void cc(Graph<T> &g)
     {
         if (!g.Explored(s))
         {
-            dfs<int>(g,s);
+            dfs<T>(g,s);
             g.incrementCC_Count(1);
         }
-        }    
+    }
 }
 
 // Breadth first search
@@ -124,20 +124,23 @@ template <typename T>
     /** Give a digraph put the vertices in order such that all its directed edges point from a ver
     vertex earlier in the order to a vertex later in the order  */
     /**First we have to detect cycles  */
-    // TODO: using explicit stack instead of recursion might obiviate the need for the cycle stack
     template<typename T>
-    std::vector<T>  directedDFS_return_cycle( Graph<T> & g, int v)
-    { 
+    std::vector<T> directedDFS_return_cycle(Graph<T> & g, T v)
+    {
         std::vector<T> cycle;
         g.SetExplored(v);
         g.SetOnStack(v);
         for (auto &&edge : g.adj(v))
         {
-           std::cout << edge << "\n";
             if (!g.Explored(edge))
             {
-                g.SetEdgeTo(edge,v);
-                directedDFS_return_cycle(g,edge);
+                g.SetEdgeTo(edge, v);
+                auto result = directedDFS_return_cycle(g, edge);
+                if (!result.empty())
+                {
+                    g.ResetOnStack(v);
+                    return result;
+                }
             }
             else if (g.OnStack(edge))
             {
@@ -147,9 +150,11 @@ template <typename T>
                 }
                 cycle.push_back(edge);
                 cycle.push_back(v);
+                g.ResetOnStack(v);
+                return cycle;
             }
         }
-        
+        g.ResetOnStack(v);
         return cycle;
     }
     /**The recursive call in the DFS is a stack that contains the path under investigation

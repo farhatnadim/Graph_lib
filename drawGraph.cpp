@@ -32,10 +32,16 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    auto cycle = directedDFS_return_cycle<int>(Digraph,0);
-    for ( auto && element : cycle)
-        cout << element ;
-    cout << "\n";
+    drawGraph(out_file, Digraph);
     out_file.close();
+
+    auto cycle = directedDFS_return_cycle<int>(Digraph, 0);
+    if (!cycle.empty())
+    {
+        cout << "Cycle found: ";
+        for (auto && element : cycle)
+            cout << element << " ";
+        cout << "\n";
+    }
     return 0;
 }

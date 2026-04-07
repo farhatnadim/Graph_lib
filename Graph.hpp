@@ -28,8 +28,8 @@ class Graph
 
 public:
     // Constructors
-    Graph (int V)
-    {   
+    Graph (int V) : m_cc_count{0}, isCyclic{false}, isDigraph{false}, isConnected{false}
+    {
         initialize_explicit(V,0);
     }
 
@@ -80,18 +80,18 @@ public:
         }
     }
 
-    m_e++;  // Increment edge count
 }
 
     edges_t adj(T v) const
-    {   
-        try 
+    {
+        try
         {
             return m_adj_list.at(v);
         }
         catch (std::out_of_range & e)
         {
             std::cerr << "Exception caught: the  " << v  << "  " << e.what() << '\n';
+            return edges_t{};
         }
     }
 
@@ -166,6 +166,11 @@ public:
     void SetOnStack(const T & v)
     {
         m_on_stack[v] = true;
+    }
+
+    void ResetOnStack(const T & v)
+    {
+        m_on_stack[v] = false;
     }
     const std::vector<bool> & GetExplored()
     {
