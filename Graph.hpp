@@ -28,12 +28,11 @@ class Graph
 
 public:
     // Constructors
-    Graph (int V) : m_cc_count{0}, isCyclic{false}, isDigraph{false}, isConnected{false}
+    Graph (int V) : isConnected{false}, isCyclic{false}, isDigraph{false}, m_cc_count{0}
     {
         initialize_explicit(V,0);
     }
-
-    Graph(std::ifstream& f, Graph_Input_type input, bool diGraph = false) : m_cc_count{0}, isCyclic{false}, isDigraph{diGraph}
+    Graph(std::ifstream& f, Graph_Input_type input, bool diGraph = false) : isConnected{false}, isCyclic{false}, isDigraph{diGraph}, m_cc_count{0}
     {
         std::string edges;
         std::string vertices;
