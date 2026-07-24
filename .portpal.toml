@@ -1,0 +1,135 @@
+# portpal consumer config for Graph_lib — mentors the architecture rework
+# specified in plans/architecture.md. portpal is hints-only: it never writes
+# implementation code; Nadim writes every line.
+#
+#   portpal doctor                       # config/toolchain/backend sanity
+#   portpal status                       # STUB/IMPL/VERIF per algorithm
+#   portpal watch GraphAlgo.hpp          # mentor hints on save
+#   portpal hint GraphAlgo.hpp --instructor professor   # theory lecture
+#   portpal watch lean4/GraphLib/Traversal/Basic.lean --instructor formalization-engineer
+
+[project]
+name = "Graph_lib"
+
+[backend]
+default = "auto"                        # anthropic when ANTHROPIC_API_KEY, else local
+local_endpoint = "http://localhost:8081"  # thor tunnel: ssh -fN -L 8081:localhost:8081 nadim@thor
+local_model = "qwen3-coder-next"
+
+[grounding]
+# Same bookshelf engine as Algorithms (nano-graphrag + nomic embeddings on :8002).
+# Algorithms Illuminated Part 2 (the graph chapters) is being indexed now;
+# Sedgewick and CLRS are the better graph references to index next.
+runner = "~/Source/nano-graphrag/.venv/bin/python ~/Source/nano-graphrag/demo/algorithms_books.py query --mode local --context-only"
+max_chars = 16000
+timeout = 300
+
+[lean_tools]
+# Live Lean toolchain context for the formalization-engineer instructor:
+# `lake env lean` diagnostics, the goal at each sorry (leanclient — install
+# portpal's [lean] extra), and a declaration search over cslib so the
+# formalization reuses cslib/Mathlib graph abstractions — the ultimate goal
+# is upstreaming verified graph algorithms into leanprover/cslib.
+reference_libs = ["~/Source/cslib"]
+goal_states = true
+web_search = false
+
+[docs]
+# The architecture spec doubles as the per-unit porting notes: portpal pulls
+# the `## <notes_heading>` section of this file into each unit's hint context.
+porting_notes = "plans/architecture.md"
+
+[targets.cpp]
+build = "cmake -B build -DBUILD_TESTING=ON && cmake --build build -j4"
+test = "ctest --test-dir build --output-on-failure"
+test_filter_flag = "-R {filter}"
+stub_markers = ["TODO: User implements"]
+extensions = [".hpp", ".cpp"]
+
+[targets.lean]
+# Lake project lives in lean4/ (Nadim runs `lake init` and writes every line).
+cwd = "lean4"
+build = "lake build"
+test = "lake build"                       # compiling IS the test until theorems exist
+stub_markers = ["sorry"]
+extensions = [".lean"]
+
+# ---------------------------------------------------------------------------
+# Units — current layout. GraphAlgo.hpp still holds several algorithm
+# families, so it maps to the transitional `graph_algorithms` unit. At
+# migration step 5 (split into include/graphlib/*.hpp), delete these two
+# units and uncomment the per-topic units below.
+# ---------------------------------------------------------------------------
+
+[[units]]
+name = "graph_core"
+python = []
+cpp = "Graph.hpp"
+lean = "lean4/GraphLib/Core/Basic.lean"
+notes_heading = "## graph_core"
+algorithms = []
+
+[[units]]
+name = "graph_algorithms"
+python = []
+cpp = "GraphAlgo.hpp"
+lean = "lean4/GraphLib/GraphAlgorithms/Basic.lean"
+notes_heading = "## graph_algorithms"
+algorithms = ["dfs", "bfs", "cc", "detect_cycle"]
+
+# --- future layout (uncomment as the files come into existence) ------------
+#
+# [[units]]
+# name = "io"
+# cpp = "include/graphlib/io.hpp"
+# notes_heading = "## io"
+# algorithms = ["load_graph", "draw_graph"]
+#
+# [[units]]
+# name = "traversal"
+# cpp = "include/graphlib/traversal.hpp"
+# lean = "lean4/GraphLib/Traversal/Basic.lean"
+# notes_heading = "## traversal"
+# algorithms = ["dfs", "bfs"]
+#
+# [[units]]
+# name = "components"
+# cpp = "include/graphlib/components.hpp"
+# lean = "lean4/GraphLib/Components/Basic.lean"
+# notes_heading = "## components"
+# algorithms = ["cc"]
+#
+# [[units]]
+# name = "cycles"
+# cpp = "include/graphlib/cycles.hpp"
+# lean = "lean4/GraphLib/Cycles/Basic.lean"
+# notes_heading = "## cycles"
+# algorithms = ["detect_cycle", "directed_cycle"]
+#
+# [[units]]
+# name = "ordering"
+# cpp = "include/graphlib/ordering.hpp"
+# lean = "lean4/GraphLib/Ordering/Basic.lean"
+# notes_heading = "## ordering"
+# algorithms = ["topological_sort"]
+#
+# [[units]]
+# name = "scc"
+# cpp = "include/graphlib/scc.hpp"
+# lean = "lean4/GraphLib/Scc/Basic.lean"
+# notes_heading = "## scc"
+# algorithms = ["kosaraju"]
+#
+# [[units]]
+# name = "shortest_paths"
+# cpp = "include/graphlib/shortest_paths.hpp"
+# lean = "lean4/GraphLib/ShortestPaths/Basic.lean"
+# notes_heading = "## shortest_paths"
+# algorithms = ["dijkstra", "a_star"]
+#
+# [[units]]
+# name = "mst"
+# cpp = "include/graphlib/mst.hpp"
+# lean = "lean4/GraphLib/Mst/Basic.lean"
+# notes_heading = "## mst"
+# algorithms = ["union_find", "kruskal", "prim"]

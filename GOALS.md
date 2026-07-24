@@ -39,9 +39,39 @@ the `Graph<T>` data structure in `Graph.hpp`.
 - [ ] Build a knowledge graph from a document corpus (entities as vertices, relations as edges)
 - [ ] Graph-based retrieval: neighborhood / multi-hop traversal to expand LLM context
 
-## Code quality
+## Architecture rework (spec: plans/architecture.md — Nadim codes, portpal mentors)
 
-- [ ] Remove duplicate `Get_cc_Count` / `Get_CC_Count` accessors (Graph.hpp:150, :194)
-- [ ] Return `adj()` / `adj_list()` by const-reference instead of by value
-- [ ] Fix sign-compare warnings in traversal loops
-- [ ] Remove untracked `Graph.cpp.hints.md` / `Graph.hpp.hints.md` or fold into docs
+<!-- Migration steps from the spec; each leaves the build/tests green.
+     Stub convention: `// TODO: User implements` (portpal's stub marker). -->
+
+- [ ] Review the spec; amend decisions D1–D6 where you disagree
+- [ ] Step 1: label⇄dense-id interner; state vectors indexed by id
+- [ ] Step 2: traversal result object (dfs/bfs/path-to out of Graph; const graph)
+- [ ] Step 3: components + cycles result objects (graph loses all algorithm state)
+- [ ] Step 4: silent & total library (expected-based parsing, const adjacency view, no printing)
+- [ ] Step 5: split into include/graphlib/*.hpp; uncomment per-topic portpal units
+- [ ] Step 6: edge payload template parameter (weighted layer)
+- [ ] Step 7: new algorithms — ordering → scc → shortest_paths → mst (tracked above)
+- [ ] Step 8: warning sweep, delete stale *.hints.md strays, update README
+
+## Lean 4 formalization (spec: plans/architecture.md `## lean_formalization` — cslib-aligned)
+
+<!-- Stub marker on this track is `sorry`; drive it with
+     `portpal watch lean4/... --instructor formalization-engineer`. -->
+
+- [ ] `lake init` the lean4/ project (toolchain pinned, builds clean)
+- [ ] Core representation chosen (cslib-first) + container invariant lemmas
+- [ ] Traversal: termination pattern settled; dfs/bfs reachability soundness + completeness
+- [ ] BFS depth = shortest edge-count distance
+- [ ] Components: connectivity is an equivalence; id ↔ connected
+- [ ] Cycles: witness soundness; acyclicity completeness
+- [ ] Ordering: topological soundness; DAG ↔ order exists (totality)
+- [ ] SCC: mutual-reachability equivalence; condensation is a DAG
+- [ ] Long horizon: Dijkstra correctness; MST cut/cycle properties + union-find invariants
+
+## Code quality (subsumed by the rework; kept for The_Architect history)
+
+- [ ] Remove duplicate `Get_cc_Count` / `Get_CC_Count` accessors (Graph.hpp:150, :194) — falls out of step 3
+- [ ] Return `adj()` / `adj_list()` by const-reference instead of by value — step 4
+- [ ] Fix sign-compare warnings in traversal loops — step 8
+- [ ] Remove untracked `Graph.cpp.hints.md` / `Graph.hpp.hints.md` or fold into docs — step 8
