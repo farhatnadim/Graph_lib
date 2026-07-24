@@ -1,0 +1,6 @@
+name = "GraphLib"
+version = "0.1.0"
+defaultTargets = ["GraphLib"]
+
+[[lean_lib]]
+name = "GraphLib"
