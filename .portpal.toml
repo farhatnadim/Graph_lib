@@ -16,6 +16,20 @@ default = "auto"                        # anthropic when ANTHROPIC_API_KEY, else
 local_endpoint = "http://localhost:8081"  # thor tunnel: ssh -fN -L 8081:localhost:8081 nadim@thor
 local_model = "qwen3-coder-next"
 
+[council]
+# Theory-first: the professor lectures once per *unit* (cached in
+# .portpal-cache/lectures.json, keyed on theory inputs — comments, notes,
+# algorithms, book context — NOT on code, so editing a body reuses it), and the
+# C++/Lean instructors build on that lecture instead of on a Python reference,
+# which this repo does not have. Leaves and professor then debate via
+# <!-- ask-professor: --> markers until they converge; each leaf's
+# <!-- decision: --> markers are handed to the other language, which is what
+# keeps Graph.hpp and the Lean formalization describing the same objects.
+# Expect minutes per run on thor; `--no-council` for one quick call.
+enabled = true
+max_rounds = 3
+siblings = true
+
 [grounding]
 # Same bookshelf engine as Algorithms (nano-graphrag + nomic embeddings on :8002).
 # Algorithms Illuminated Part 2 (the graph chapters) is being indexed now;
@@ -68,6 +82,16 @@ cpp = "Graph.hpp"
 lean = "lean4/GraphLib/Core/Basic.lean"
 notes_heading = "## graph_core"
 algorithms = []
+# The container is not an "algorithm", so there is nothing for the book query
+# to be built from — state it explicitly, or the professor's retrieval
+# degenerates to the literal string "graph_core" and the council is ungrounded.
+grounding_query = """\
+Graph representation: adjacency list versus adjacency matrix, their space and \
+time tradeoffs for degree, adjacency test, and neighbor iteration; graphs over \
+arbitrary vertex labels versus dense integer indices; the handshake lemma \
+(sum of degrees = twice the edge count); parallel edges and self-loops; \
+directed versus undirected representation and what symmetry means for the \
+adjacency structure."""
 
 [[units]]
 name = "graph_algorithms"
