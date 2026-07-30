@@ -37,6 +37,7 @@
 *.hints.md
 *.professor.md
 *.formalization-engineer.md
+*.pr.md
 .portpal-cache/
 
 # Lean / Lake build state

@@ -17,16 +17,28 @@ local_endpoint = "http://localhost:8081"  # thor tunnel: ssh -fN -L 8081:localho
 local_model = "qwen3-coder-next"
 
 [council]
-# Theory-first: the professor lectures once per *unit* (cached in
-# .portpal-cache/lectures.json, keyed on theory inputs — comments, notes,
-# algorithms, book context — NOT on code, so editing a body reuses it), and the
-# C++/Lean instructors build on that lecture instead of on a Python reference,
-# which this repo does not have. Leaves and professor then debate via
-# <!-- ask-professor: --> markers until they converge; each leaf's
-# <!-- decision: --> markers are handed to the other language, which is what
-# keeps Graph.hpp and the Lean formalization describing the same objects.
-# Expect minutes per run on thor; `--no-council` for one quick call.
+# Three peers with non-overlapping authority: the theorist (the `professor`
+# instructor) owns what the algorithm IS and what must be proven; the C++ and
+# Lean instructors own what is implementable and what is provable. Nobody
+# outranks anybody — this repo has no Python reference to port from, so the
+# theorist's lecture (cached per *unit* in .portpal-cache/lectures.json, keyed
+# on theory inputs — comments, notes, algorithms, book context — NOT on code,
+# so editing a body reuses it) is what the other two build on and argue with.
+#
+# The two implementers also see each other: settled <!-- decision: --> markers
+# plus their LIVE open questions and standing dissents, which is what keeps
+# Graph.hpp and the Lean formalization describing the same objects without
+# either one mirroring the other's paradigm. Their shared success criterion is
+# the same algorithm, proven correct, with a stated complexity bound — NOT
+# similar-looking code.
+#
+# Every run ends with an explicit outcome (RESOLVED / SPLIT / CAP /
+# CAPITULATED / SATURATED) written into the sidecar's `## Council` section; a
+# standing dissent is a legitimate ending, and silence is never read as
+# agreement. Expect minutes per run on thor; `--no-council` for one quick call.
 enabled = true
+topology = "peer"          # peer | rooted — "rooted" is the old authority-rooted A/B arm
+agreement_intensity = 50   # 0-100, swept: how readily a participant drops a position
 max_rounds = 3
 siblings = true
 

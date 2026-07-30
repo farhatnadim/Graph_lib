@@ -9,6 +9,7 @@
 #include <stack>
 #include <queue>
 
+// What is an interner?
 // Inspired by Sedgewick's Graph implementation (page 540)
 // Since the
 template <typename T>

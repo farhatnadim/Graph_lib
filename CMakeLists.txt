@@ -9,6 +9,7 @@ add_subdirectory(external)
 # Set the C++ standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Add the engine directory as a subdirectory if you have other CMakeLists.txt files in subdirectories
 # include(.)
