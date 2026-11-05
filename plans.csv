@@ -1,0 +1,2 @@
+name,location,summary,date,implemented,commit
+architecture,plans/architecture.md,"Specification of the architecture rework: C++23 graph library with algorithms as non-member functions, plus the Lean 4 track. The author implements it.",2026-07-23,no,
